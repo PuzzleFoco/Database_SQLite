@@ -7,7 +7,7 @@ public class Connect {
     public static void connect() {
         Connection conn = null;
         try {
-            String url = "jdbc:sqlite:C:/Users/engelf2/IdeaProjects/Database/db/chinook.db";
+            String url = "jdbc:sqlite:C:/Users/engelf2/IdeaProjects/Database_SQLite/db/chinook.db";
             conn = DriverManager.getConnection(url);
 
             System.out.println("Connection to SQLIte has been established.");
