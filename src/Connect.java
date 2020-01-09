@@ -6,7 +6,7 @@ public class Connect {
 
     public static void connect() {
         Connection conn = null;
-        try{
+        try {
             String url = "jdbc:sqlite:C:/Users/engelf2/IdeaProjects/Database/db/chinook.db";
             conn = DriverManager.getConnection(url);
 
@@ -18,7 +18,7 @@ public class Connect {
                 if(conn != null){
                     conn.close();
                 }
-            }catch (SQLException ex) {
+            } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
         }
