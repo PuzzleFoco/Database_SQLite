@@ -7,7 +7,7 @@ public class Connect {
     public static void connect() {
         Connection conn = null;
         try{
-            String url = "jdbc:sqlite:C:/Users/engelf2/IdeaProjects/Database/db/chinook.db";
+            String url = "jdbc:sqlite:C:/Users/Frieda.Schulz/IdeaProjects/Database_SQLite/db/ausgabendatenbank.db";
             conn = DriverManager.getConnection(url);
 
             System.out.println("Connection to SQLIte has been established.");
@@ -26,5 +26,7 @@ public class Connect {
 
     public static void main(String[] args){
         connect();
+        new createNewTable();
+
     }
 }
