@@ -32,20 +32,21 @@ public class InsertExpenses {
     }
 
     public int createexpenseID(){
-        int existingID = 1;
-        String sql = "SELECT expenseID FROM expenses";
+        int existingID = 0;
+        String sql = "SELECT MAX(expenseID) FROM expenses";
+
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)){
-            while (rs.next()){ existingID = rs.getInt("expenseID");}
+            while (rs.next()) existingID = rs.getInt("MAX(expenseID)");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return existingID+1;
     }
 
-    public static void askfornewinsert(){
+    public void askfornewinsert(){
         InsertExpenses app = new InsertExpenses();
         String reason = JOptionPane.showInputDialog("What did you purchase?");
         double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did it cost?"));
@@ -58,7 +59,8 @@ public class InsertExpenses {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        askfornewinsert();
+        InsertExpenses insertExpenses = new InsertExpenses();
+        insertExpenses.askfornewinsert();
 
     }
 
