@@ -8,6 +8,7 @@ public class Connect {
         Connection conn = null;
         try{
             String url = "jdbc:sqlite:C:/Users/engelf2/IdeaProjects/Database_SQLite/db/ausgabendatenbank.db";
+
             conn = DriverManager.getConnection(url);
 
             System.out.println("Connection to SQLIte has been established.");
@@ -18,7 +19,7 @@ public class Connect {
                 if(conn != null){
                     conn.close();
                 }
-            }catch (SQLException ex) {
+            } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
         }
