@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.sql.*;
 
 public class InsertExpenses {
@@ -15,20 +16,48 @@ public class InsertExpenses {
         return conn;
     }
 
-    public void insert(String reason, double amount, int expenseID) {
-        String sql = "INSERT INTO expenses (reason, amount, expenseID) VALUES (?,?,?)";
+    public void insert(String category, String reason, double amount, int expenseID) {
+        String sql = "INSERT INTO expenses (category, reason, amount, expenseID) VALUES (?,?,?,?)";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, reason);
-            pstmt.setDouble(2, amount);
-            pstmt.setInt(3, expenseID);
+            pstmt.setString(1, category);
+            pstmt.setString(2, reason);
+            pstmt.setDouble(3, amount);
+            pstmt.setInt(4, expenseID);
             pstmt.executeUpdate();
             conn.close();
         } catch (SQLException e) {
             //System.err.println("got an exception");
             System.out.println(e.getMessage());
         }
+    }
+
+    public String selectCategory() throws InterruptedException {
+        JFrame frame = new JFrame();
+        final String[] category = new String[1];
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JButton jButton1 = new JButton("Select category");
+
+        String[] mystring = { "groceries", "car expenses", "beauty products", "health care" };
+        final JList jList1 = new JList(mystring);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                category[0] = jList1.getSelectedValue().toString();
+
+                frame.dispose();
+            }
+        });
+
+
+        frame.add(jList1, "Center");
+        frame.add(jButton1,"South");
+
+        frame.setSize(300, 200);
+        frame.setVisible(true);
+
+        while(category[0] == null) {Thread.sleep(1000);}
+        return category[0];
     }
 
     public int createexpenseID(){
@@ -46,22 +75,22 @@ public class InsertExpenses {
         return existingID+1;
     }
 
-    public void askfornewinsert(){
+    public void askfornewinsert() throws InterruptedException {
         InsertExpenses app = new InsertExpenses();
-        String reason = JOptionPane.showInputDialog("What did you purchase?");
-        double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did it cost?"));
+        String category = selectCategory();
+        String reason = JOptionPane.showInputDialog("What " + category + " products did you purchase?");
+        double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did they cost?"));
         int expenseID = createexpenseID();
 
-        app.insert(reason, amount, expenseID);
+        app.insert(category, reason, amount, expenseID);
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         InsertExpenses insertExpenses = new InsertExpenses();
         insertExpenses.askfornewinsert();
-
     }
 
 }
