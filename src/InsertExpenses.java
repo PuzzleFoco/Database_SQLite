@@ -33,20 +33,22 @@ public class InsertExpenses {
         }
     }
 
-    public String selectCategory(){
+    public String selectCategory() throws InterruptedException {
         JFrame frame = new JFrame();
         final String[] category = new String[1];
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JButton jButton1 = new JButton("Select category");
 
-        String[] mystring = { "food", "car expenses", "beauty products", "health care" };
+        String[] mystring = { "groceries", "car expenses", "beauty products", "health care" };
         final JList jList1 = new JList(mystring);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 category[0] = jList1.getSelectedValue().toString();
+
                 frame.dispose();
             }
         });
+
 
         frame.add(jList1, "Center");
         frame.add(jButton1,"South");
@@ -54,6 +56,7 @@ public class InsertExpenses {
         frame.setSize(300, 200);
         frame.setVisible(true);
 
+        while(category[0] == null) {Thread.sleep(1000);}
         return category[0];
     }
 
@@ -72,12 +75,11 @@ public class InsertExpenses {
         return existingID+1;
     }
 
-    public void askfornewinsert() {
+    public void askfornewinsert() throws InterruptedException {
         InsertExpenses app = new InsertExpenses();
         String category = selectCategory();
-        System.out.println(category);
-        String reason = JOptionPane.showInputDialog("What did you purchase?");
-        double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did it cost?"));
+        String reason = JOptionPane.showInputDialog("What " + category + " products did you purchase?");
+        double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did they cost?"));
         int expenseID = createexpenseID();
 
         app.insert(category, reason, amount, expenseID);
@@ -86,7 +88,7 @@ public class InsertExpenses {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
         InsertExpenses insertExpenses = new InsertExpenses();
         insertExpenses.askfornewinsert();
     }
