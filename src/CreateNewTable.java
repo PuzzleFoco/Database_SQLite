@@ -3,10 +3,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 public class CreateNewTable {
 
     private static final String CREATE_TABLE_SQL ="CREATE TABLE expenses ("
             + "category String,"
+            + "date Date,"
             + "reason String,"
             + "amount double,"
             + "expenseID int PRIMARY KEY)";
@@ -18,7 +20,6 @@ public class CreateNewTable {
         Statement stmt = null;
 
         try {
-
             conn = DriverManager.getConnection(url);
             stmt = conn.createStatement();
 
