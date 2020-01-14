@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class InsertExpenses {
 
@@ -16,15 +20,16 @@ public class InsertExpenses {
         return conn;
     }
 
-    public void insert(String category, String reason, double amount, int expenseID) {
-        String sql = "INSERT INTO expenses (category, reason, amount, expenseID) VALUES (?,?,?,?)";
+    public void insert(String category, java.sql.Date date, String reason, double amount, int expenseID) {
+        String sql = "INSERT INTO expenses (category, date, reason, amount, expenseID) VALUES (?,?,?,?,?)";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, category);
-            pstmt.setString(2, reason);
-            pstmt.setDouble(3, amount);
-            pstmt.setInt(4, expenseID);
+            pstmt.setDate(2, (java.sql.Date) date);
+            pstmt.setString(3, reason);
+            pstmt.setDouble(4, amount);
+            pstmt.setInt(5, expenseID);
             pstmt.executeUpdate();
             conn.close();
         } catch (SQLException e) {
@@ -39,7 +44,7 @@ public class InsertExpenses {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JButton jButton1 = new JButton("Select category");
 
-        String[] mystring = { "groceries", "car expenses", "beauty products", "health care" };
+        String[] mystring = { "groceries", "car", "beauty", "health care" };
         final JList jList1 = new JList(mystring);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -75,20 +80,24 @@ public class InsertExpenses {
         return existingID+1;
     }
 
-    public void askfornewinsert() throws InterruptedException {
+    public void askfornewinsert() throws InterruptedException, ParseException {
         InsertExpenses app = new InsertExpenses();
         String category = selectCategory();
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateInString = JOptionPane.showInputDialog("When did you purchase the " + category + " products? (format yyyy-mm-dd €)");
+        java.sql.Date date = new java.sql.Date(sdf.parse(dateInString).getTime());
+        System.out.println(date);
         String reason = JOptionPane.showInputDialog("What " + category + " products did you purchase?");
-        double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did they cost?"));
+        double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did it cost? (format xx.yy €)"));
         int expenseID = createexpenseID();
 
-        app.insert(category, reason, amount, expenseID);
+        app.insert(category, date, reason, amount, expenseID);
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, ParseException {
         InsertExpenses insertExpenses = new InsertExpenses();
         insertExpenses.askfornewinsert();
     }
