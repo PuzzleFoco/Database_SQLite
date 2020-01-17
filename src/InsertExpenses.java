@@ -54,7 +54,6 @@ public class InsertExpenses {
             }
         });
 
-
         frame.add(jList1, "Center");
         frame.add(jButton1,"South");
 
@@ -66,18 +65,21 @@ public class InsertExpenses {
     }
 
     public int createexpenseID(){
-        int existingID = 0;
-        String sql = "SELECT MAX(expenseID) FROM expenses";
-
+        int newID = 0;
+        String sql = "SELECT expenseID FROM expenses";
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)){
-            while (rs.next()) existingID = rs.getInt("MAX(expenseID)");
+            while (rs.next()){
+                if(newID == rs.getInt("expenseID")){ newID = newID+1;
+                System.out.println(newID);}
+                else return newID;
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return existingID+1;
+        return newID;
     }
 
     public void askfornewinsert() throws InterruptedException, ParseException {
