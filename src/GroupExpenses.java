@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.security.acl.Group;
 import java.sql.*;
 import java.text.ParseException;
+import java.time.LocalDate;
 
 public class GroupExpenses {
 
@@ -48,31 +49,22 @@ public class GroupExpenses {
         String selectedcategory = groupExpenses.selectCategory();
 
         double sum = 0;
-        String sql = "a";
-
-        switch (selectedcategory){
-            case "groceries":
-                sql = "SELECT SUM(amount) FROM expenses WHERE category == 'groceries'";
-                break;
-            case "car":
-                sql = "SELECT SUM(amount) FROM expenses WHERE category == 'car'";
-                break;
-            case "beauty":
-                sql = "SELECT SUM(amount) FROM expenses WHERE category== 'beauty'";
-                break;
-            case "health care":
-                sql = "SELECT SUM(amount) FROM expenses WHERE category == 'health care'";
-                break;
-            default: System.out.println("Die Kategorie konnte nicht gefunden werden.");
-        }
+        String sql = "SELECT date, amount FROM expenses  WHERE category == '" + selectedcategory + "'";
+        int month = 1;
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) sum = rs.getDouble("SUM(amount)");
+            while (rs.next()){
+                LocalDate localDate = rs.getObject("date", LocalDate.class);
+                // https://stackoverflow.com/questions/43039614/insert-fetch-java-time-localdate-objects-to-from-an-sql-database-such-as-h2
+                System.out.println("Test2");
+                //if (month == localDate.getMonthValue()){
+                sum = sum + rs.getDouble("amount");//}
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());}
 
-        System.out.println(sum);
+        System.out.println("You've spend " + sum + " € on " + selectedcategory + " products.");
     }
 }

@@ -8,13 +8,13 @@ public class CreateNewTable {
 
     private static final String CREATE_TABLE_SQL ="CREATE TABLE expenses ("
             + "category String,"
-            + "date Date,"
+            + "date LocalDate,"
             + "reason String,"
             + "amount double,"
             + "expenseID int PRIMARY KEY)";
 
     public static void main(String[] args) {
-        String url = "jdbc:sqlite:C:/Users/Frieda.Schulz/IdeaProjects/Database_SQLite/db/ausgabendatenbank.db";
+        String url =  "jdbc:sqlite:C:/Users/Frieda.Schulz/IdeaProjects/Testprojekte/Database_SQLite/db/ausgabendatenbank.db";
 
         Connection conn = null;
         Statement stmt = null;
