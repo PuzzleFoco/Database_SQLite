@@ -8,6 +8,8 @@ import java.time.LocalDate;
 
 public class InsertExpenses {
 
+    private String[] string;
+
     private static Connection connect() {
         // SQLite connection string
         String url =  "jdbc:sqlite:C:/Users/Frieda.Schulz/IdeaProjects/Testprojekte/Database_SQLite/db/ausgabendatenbank.db";
@@ -84,13 +86,24 @@ public class InsertExpenses {
     public void askfornewinsert() throws InterruptedException, ParseException {
         InsertExpenses app = new InsertExpenses();
         String category = selectCategory();
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateInString = JOptionPane.showInputDialog("When did you purchase the " + category + " products? (format yyyy-mm-dd €)");
-        LocalDate date = LocalDate.parse(dateInString);
-        System.out.println(date);
         String reason = JOptionPane.showInputDialog("What " + category + " products did you purchase?");
         double amount = Double.parseDouble(JOptionPane.showInputDialog("How much did it cost? (format xx.yy €)"));
         int expenseID = createexpenseID();
+
+        Cal.main(string);
+        int mm = Cal.mm;
+        int dd = Cal.dd;
+        int yy = Cal.yy;
+        String dateInString;
+
+        if (mm < 9) {
+            if (dd > 9) dateInString = (yy + "-0" + (mm+1) + "-" + dd);
+            else dateInString = (yy + "-0" + (mm+1) + "-0" + dd);
+        }
+        else if (dd<10) dateInString = (yy + "-" + (mm+1) + "-0" + dd);
+        else dateInString = (yy + "-" + (mm+1) + "-" + dd);
+        LocalDate date = LocalDate.parse(dateInString);
+        System.out.println(date);
 
         app.insert(category, date, reason, amount, expenseID);
     }
