@@ -223,12 +223,12 @@ public class Cal extends JPanel {
             dd = newDay;
         // Now shade the correct square
         Component square = labs[(leadGap + newDay - 1) / 7][(leadGap + newDay - 1) % 7];
-        square.setBackground(Color.yellow);
+        square.setBackground(Color.white);
         square.repaint();
         activeDay = newDay;
     }
 
-    public static void main(String[] av) {
+    public static void main(String[] args) {
         JFrame f = new JFrame("Kalender");
         Container c = f.getContentPane();
         c.setLayout(new FlowLayout());
@@ -258,5 +258,7 @@ public class Cal extends JPanel {
                 System.out.println(date[0]);
             }
         });
+
+        return;
     }
 }
